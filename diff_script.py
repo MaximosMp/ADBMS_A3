@@ -1,14 +1,7 @@
-# %%
 import csv
 import numpy as np
 
-# %% [markdown]
-# # INT 8
 
-# %% [markdown]
-# ### Encoding
-
-# %%
 def differential_encoding_int8(input_file, output_file):
     running_value = 0  
     count = 0
@@ -36,18 +29,6 @@ def differential_encoding_int8(input_file, output_file):
             running_value = current_value
             count+=1
 
-# %%
-input_csv_file = 'ADM-2023-Assignment-3-data-TPCH-SF-1\l_tax-int8.csv'
-output_dif_file = 'encoded_output.csv.dif'
-
-differential_encoding_int8(input_csv_file, output_dif_file)
-
-#from 11,722 KB to 5,861 KB
-
-# %% [markdown]
-# ### Decoding
-
-# %%
 def differential_decoding_int8(input_file, output_file):
     running_value = 0
     escape = 1
@@ -76,22 +57,6 @@ def differential_decoding_int8(input_file, output_file):
                     escape = 1
                 
             
-
-# %%
-input_dif_file = 'encoded_output.csv.dif'
-output_csv_file = 'decoded_output.csv.dif.csv'
-
-differential_decoding_int8(input_dif_file, output_csv_file)
-
-# back to 11,722 KB
-
-# %% [markdown]
-# # INT 16
-
-# %% [markdown]
-# ### Encoding
-
-# %%
 def differential_encoding_int16(input_file, output_file):
     running_value = 0  
     count = 0
@@ -119,20 +84,6 @@ def differential_encoding_int16(input_file, output_file):
             running_value = current_value
             count+=1
                     
-                
-
-# %%
-input_csv_file = 'ADM-2023-Assignment-3-data-TPCH-SF-1\l_discount-int16.csv'
-output_dif_file = 'encoded_output.csv.dif'
-
-differential_encoding_int16(input_csv_file, output_dif_file)
-
-#from 12,255 KB to 5,861 KB
-
-# %% [markdown]
-# ### Decoding
-
-# %%
 def differential_decoding_int16(input_file, output_file):
     running_value = 0
     escape = 1
@@ -160,23 +111,6 @@ def differential_decoding_int16(input_file, output_file):
                 else:
                     escape = 1
                 
-            
-
-# %%
-input_dif_file = 'encoded_output.csv.dif'
-output_csv_file = 'decoded_output.csv.dif.csv'
-
-differential_decoding_int16(input_dif_file, output_csv_file)
-
-# back to 12,255 KB
-
-# %% [markdown]
-# # INT 32
-
-# %% [markdown]
-# ### Encoding
-
-# %%
 def differential_encoding_int32(input_file, output_file):
     
     #first we read the first 201 lines to get 200 differences
@@ -189,7 +123,7 @@ def differential_encoding_int32(input_file, output_file):
             current_value = int(line.strip())
     
             if sample_count > 0:
-                sample_diff = current_value - sample_prev
+                sample_diff = curent_value - sample_prev
                 sample.append(sample_diff)
             
             sample_count+=1
@@ -235,18 +169,6 @@ def differential_encoding_int32(input_file, output_file):
                     
                 
 
-# %%
-input_csv_file = 'ADM-2023-Assignment-3-data-TPCH-SF-1\l_suppkey-int32.csv'
-output_dif_file = 'encoded_output.csv.dif'
-
-differential_encoding_int32(input_csv_file, output_dif_file)
-
-#from 28,655 KB to 11,722 KB
-
-# %% [markdown]
-# ### Decoding
-
-# %%
 def differential_decoding_int32(input_file, output_file):
     running_value = 0
     escape = 1
@@ -287,22 +209,6 @@ def differential_decoding_int32(input_file, output_file):
                         escape = 1
                     
             
-
-# %%
-input_dif_file = 'encoded_output.csv.dif'
-output_csv_file = 'decoded_output.csv.dif.csv'
-
-differential_decoding_int32(input_dif_file, output_csv_file)
-
-# back to 28,655 KB
-
-# %% [markdown]
-# # INT 64
-
-# %% [markdown]
-# ### Encoding
-
-# %%
 def differential_encoding_int64(input_file, output_file):
     
     #first we read the first 201 lines to get 200 differences
@@ -361,18 +267,6 @@ def differential_encoding_int64(input_file, output_file):
             running_value = current_value
             count+=1
 
-# %%
-input_csv_file = 'ADM-2023-Assignment-3-data-TPCH-SF-1\l_extendedprice-int64.csv'
-output_dif_file = 'encoded_output.csv.dif'
-
-differential_encoding_int64(input_csv_file, output_dif_file)
-
-# from 46,131 KB to 17,689
-
-# %% [markdown]
-# ### Decoding
-
-# %%
 def differential_decoding_int64(input_file, output_file):
     running_value = 0
     escape = 1
@@ -413,13 +307,4 @@ def differential_decoding_int64(input_file, output_file):
                         escape = 1
                     
             
-
-# %%
-input_dif_file = 'encoded_output.csv.dif'
-output_csv_file = 'decoded_output.csv.dif.csv'
-
-differential_decoding_int64(input_dif_file, output_csv_file)
-
-# back to 46,131 KB
-
 

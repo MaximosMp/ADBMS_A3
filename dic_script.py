@@ -38,6 +38,9 @@ def dic_encode(datatype, file_path_arg):
                 values_encoded.append(mapping[i][1])
 
     # correct the datatype for mapping and values_encoded if not string
+    bits = calculate_max_bit_length(input_file)
+    datatype = choose_encoding_width(bits)
+
     if datatype == 'int8':
         mapping = np.array(mapping, dtype=np.int8)
         values_encoded = np.array(values_encoded, dtype=np.int8)
