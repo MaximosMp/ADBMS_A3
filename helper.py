@@ -94,5 +94,3 @@ def choose_encoding_width(mean_bits):
         return "int64"
     else:
         raise ValueError("Unsupported encoding width")
-
-
