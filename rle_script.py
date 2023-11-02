@@ -67,10 +67,10 @@ def rle_decode(encoded_file):
         decoded_data.extend([value] * count)
 
     # write decoded data to a new CSV file
-    decoded_file = os.path.join("decoded_files", os.path.basename(encoded_file) + '.csv')
-    with open(decoded_file, 'w') as file:
-        for value in decoded_data:
-            file.write(f"{value}\n")
+    # decoded_file = os.path.join("decoded_files", os.path.basename(encoded_file) + '.csv')
+    # with open(decoded_file, 'w') as file:
+    for value in decoded_data:
+        print(f"{value}")
 
     # # Validate the decoding
     # def validate_decoding(original_data, decoded_file):
@@ -91,4 +91,4 @@ def rle_decode(encoded_file):
     # else:
     #     print("Decoding is not successful. There is a mismatch between original and decoded data. The mismatch positions are:", mismatch_positions)
 
-    return decoded_data
+    # return decoded_data
