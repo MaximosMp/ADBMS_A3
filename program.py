@@ -78,7 +78,7 @@ if __name__ == '__main__':
         if sys.argv[2] == 'bin':
             bin_decode(input_file_path, sys.argv[2])
         elif sys.argv[2] == 'rle': 
-            rle_decode()
+            rle_decode(input_file_path)
         
         elif sys.argv[2] == 'dic':
             dic_decode(input_file_path)
@@ -136,3 +136,66 @@ if __name__ == '__main__':
         file = os.path.join(output_dir_path, filename)
         encoded_file_size = os.path.getsize(file)
         updateLogfile('logfile.txt', 'size', sys.argv, original_file_size, encoded_file_size)
+
+    
+
+    if sys.argv[1] == 'run_all':
+
+        method = ['en', 'de']
+        encoding = ['bin', 'rle', 'dic', 'for_', 'dif']
+        width = ['int8', 'int16', 'int32', 'int64']
+
+        for m in method:
+            for e in encoding:
+                for w in width:
+                    
+                    if m == 'en':
+                        if e == bin:
+                            bin_encode(input_file_path, w)
+                        elif e == 'rle':
+                            rle_encode(w, input_file_path)
+                        elif e == 'dic':
+                            dic_encode(w, input_file_path)
+                        
+                        elif e == 'for_':
+                            output_dir_path = make_output_dir('encoded_files')
+                            filename = os.path.basename(input_file_path) + '.for'
+                            encoded_file = os.path.join(output_dir_path, filename)
+                            if w == 'int8':
+                                encoded_file = FrameOfReference_encoding_int8(input_file_path, encoded_file)
+                            elif w == 'int16':
+                                encoded_file = FrameOfReference_encoding_int16(input_file_path, encoded_file)
+                            elif w == 'int32':
+                                encoded_file = FrameOfReference_encoding_int32(input_file_path, encoded_file)
+                            elif w == 'int64':
+                                encoded_file = FrameOfReference_encoding_int64(input_file_path, encoded_file)
+                            else:
+                                printNotAcceptedCMD('error_term')
+                                exit()
+                        elif e == 'dif':
+                            output_dir_path = make_output_dir('encoded_files')
+                            filename = os.path.basename(input_file_path) + '.dif'
+                            encoded_file = os.path.join(output_dir_path, filename)
+                            if w == 'int8':
+                                encoded_file = differential_encoding_int8(input_file_path, encoded_file)
+                            elif w == 'int16':
+                                encoded_file = differential_encoding_int16(input_file_path, encoded_file)
+                            elif w == 'int32':
+                                encoded_file = differential_encoding_int32(input_file_path, encoded_file)
+                            elif w == 'int64':
+                                encoded_file = differential_encoding_int64(input_file_path, encoded_file)
+                            else:
+                                printNotAcceptedCMD('error_term')
+                                exit()
+                        else:
+                            printNotAcceptedCMD('error_term')
+                            exit()
+                    elif m == 'de':
+                        if e == bin:
+                            bin_decode(input_file_path, w)
+                        elif e == 'rle': 
+                            rle_decode(input_file_path)
+                        elif e == 'dic':
+                            dic_decode(input_file_path)
+                        elif e == 'for_':
+                            if w == 'int8'
