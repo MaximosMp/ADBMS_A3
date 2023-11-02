@@ -32,7 +32,7 @@ if __name__ == '__main__':
             exit()
     elif sys.argv[1] == 'de':
         if sys.argv[2] == 'bin':
-            bin_decode(response)
+            bin_decode(response, sys.argv[2])
         elif sys.argv[2] == 'rle': 
             pass
         elif sys.argv[2] == 'dic':
