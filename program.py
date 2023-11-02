@@ -119,33 +119,23 @@ if __name__ == '__main__':
 
         if sys.arg[2] == 'for':
 
-            original_file_size = os.path.getsize(response)
-            filename = os.path.basename(response) + '.for'
+        #####
 
             path = sys.arg[3]
-
-            outfile = 'encoded_files/' + filename + '.for
 
             decoded_file = FrameOfReference_decoding_int8(path, outfile)
 
-            decoded_file_size = os.path.getsize(decoded_file)
-
-            updateLogfile('logfile.txt', 'size', sys.argv, original_file_size, decoded_file_size)
+        ######
 
         elif sys.arg[2] == 'dif':
 
-            original_file_size = os.path.getsize(response)
-            filename = os.path.basename(response) + '.dif'
+        ####
 
             path = sys.arg[3]
 
-            outfile = 'encoded_files/' + filename + '.dif
-
             decoded_file = differential_decoding_int8(path, outfile)
 
-            decoded_file_size = os.path.getsize(decoded_file)
-
-            updateLogfile('logfile.txt', 'size', sys.argv, original_file_size, decoded_file_size)
+        ####
         
         else:
 
