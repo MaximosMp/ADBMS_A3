@@ -83,14 +83,14 @@ def calculate_max_bit_length(input_file):
     max_bit_length = max(num.bit_length() for num in integers)
     return max_bit_length
 
-def choose_encoding_width(mean_bits):
-    if mean_bits <= 8:
+def choose_encoding_width(bits):
+    if bits <= 8:
         return "int8"
-    elif mean_bits <= 16:
+    elif bits <= 16:
         return "int16"
-    elif mean_bits <= 32:
+    elif bits <= 32:
         return "int32"
-    elif mean_bits <= 64:
+    elif bits <= 64:
         return "int64"
     else:
         raise ValueError("Unsupported encoding width")
