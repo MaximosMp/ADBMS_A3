@@ -61,7 +61,7 @@ def updateLogfile(file, logging, cmd, start, end):
         time = end - start
         file_handler.write(f'Command: {cmd}     |     Time: {time}\n')
     elif logging == 'size':
-        file_handler.write(f'Command: {cmd}     |     Compression Ratio: {start/end : 1} (Original file size: {start}, Encoded file size: {end}) \n')
+        file_handler.write(f'Command: {cmd}     |     Compression Ratio: {start/end} : 1 (Original file size: {start}, Encoded file size: {end}) \n')
     else:
         file_handler.write(f'Ooops! Something went wrong! (You gave the wrong logging type)\n')
     file_handler.close()

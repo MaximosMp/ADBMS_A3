@@ -1,0 +1,6 @@
+Command: ['program.py', 'en', 'dic', 'int8', 'l_discount-int8.csv']     |     Time: 5.006764650344849
+Command: ['program.py', 'en', 'dic', 'int8', 'l_discount-int8.csv']     |     Compression Ratio: 2.0908800220214623 : 1 (Original file size: 12548245, Encoded file size: 6001418) 
+Command: ['program.py', 'en', 'dic', 'int8', 'l_discount-int8.csv']     |     Time: 5.276272773742676
+Command: ['program.py', 'en', 'dic', 'int8', 'l_discount-int8.csv']     |     Compression Ratio: 2.0908800220214623 : 1 (Original file size: 12548245, Encoded file size: 6001418) 
+Command: ['program.py', 'en', 'dic', 'int8', 'l_discount-int8.csv']     |     Time: 5.397045850753784
+Command: ['program.py', 'en', 'dic', 'int8', 'l_discount-int8.csv']     |     Compression Ratio: 2.0908800220214623 : 1 (Original file size: 12548245, Encoded file size: 6001418) 
