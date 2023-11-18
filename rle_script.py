@@ -6,21 +6,24 @@ from helper import choose_encoding_width, calculate_max_bit_length
 def rle_encode(data_type, input_file):
 
     # Function to read data from a CSV file
-    def read_csv(file_name):
+    def read_csv(file_name, data_type):
         data = []
         with open(file_name, 'r') as file:
-            for line in file:
-                value = line.strip()
-                data.append(value)
+            if data_type == 'string':
+                for line in file:
+                    data.append(line)
+            else:
+                for line in file:
+                    data.append(line.strip())
         return data
 
     # Read data from the CSV file and based on the data type
     if data_type.startswith("int"):
-        data = [int(value) for value in read_csv(input_file)]
+        data = [int(value) for value in read_csv(input_file, data_type)]
         max_bits = calculate_max_bit_length(input_file)
         data_type = choose_encoding_width(max_bits)
     else:
-        data = read_csv(input_file)
+        data = read_csv(input_file, data_type)
 
     # RLE encoding
     encoded_data = []
@@ -70,7 +73,10 @@ def rle_decode(encoded_file):
     # decoded_file = os.path.join("decoded_files", os.path.basename(encoded_file) + '.csv')
     # with open(decoded_file, 'w') as file:
     for value in decoded_data:
-        print(f"{value}")
+        if isinstance(value, str):
+            print(value.replace('\n', ''))
+        else:
+            print(value)
 
     # # Validate the decoding
     # def validate_decoding(original_data, decoded_file):
