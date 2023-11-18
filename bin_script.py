@@ -3,7 +3,25 @@ import os
 import struct
 import filecmp
 import difflib
-from helper import calculate_max_bit_length, choose_encoding_width
+from helper import *
+
+def returnFullPath(filename):
+    cwd = os.path.dirname(__file__)
+    file_found, file_fullpath = False, None
+    if filename in os.listdir(cwd):
+        file_found = True
+        file_fullpath = os.path.join(cwd, filename)
+    
+    if not file_found and 'data' in os.listdir(cwd):
+        data_path = os.path.join(cwd, 'data')
+        if filename in os.listdir(data_path):
+            file_found = True
+            file_fullpath = os.path.join(data_path, filename)
+    
+    if file_found:
+        return file_fullpath
+    else:
+        return f'file not found + {filename}'
 
 
 def bin_encode(input_file, encoding_width="int8"):
@@ -12,7 +30,8 @@ def bin_encode(input_file, encoding_width="int8"):
         integers = [int(line.strip()) for line in f]
 
     # Create the output file name with the encoding acronym and width
-    output_file = os.path.join("encoded_files/",os.path.basename(input_file).rsplit(".", 1)[0] + ".csv.bin")
+    tmp = os.path.basename(input_file) + '.bin'
+    output_file = os.path.join(make_output_dir('encoded_files'), tmp) 
 
     bits = calculate_max_bit_length(input_file)
     encoding_width = choose_encoding_width(bits)
@@ -37,6 +56,12 @@ def bin_encode(input_file, encoding_width="int8"):
     return output_file
 
 def bin_decode(input_file, decoding_width):
+    original_filename = os.path.basename(input_file).rsplit(".")[0] + ".csv"
+    original_filepath = returnFullPath(original_filename)
+
+    bits = calculate_max_bit_length(original_filepath)
+    decoding_width = choose_encoding_width(bits)
+
     # Define the format string based on the decoding width
     if decoding_width == "int8":
         format_string = 'b'
