@@ -1,5 +1,31 @@
 import csv
 import numpy as np
+from helper import *
+
+def dif_controller_encode(datatype, filename):
+    output_dir_path = make_output_dir('encoded_files')
+    file = os.path.basename(filename) + '.dif'
+    encoded_file = os.path.join(output_dir_path, file)
+
+    if datatype == 'int8':
+        encoded_file = differential_encoding_int8(filename, encoded_file)
+    elif datatype == 'int16':
+        encoded_file = differential_encoding_int16(filename, encoded_file)
+    elif datatype == 'int32':
+        encoded_file = differential_encoding_int32(filename, encoded_file)
+    elif datatype == 'int64':
+        encoded_file = differential_encoding_int64(filename, encoded_file)
+
+
+def dif_controller_decode(datatype, file):
+    if datatype == 'int8':
+        differential_decoding_int8(file)
+    elif datatype == 'int16':
+        differential_decoding_int16(file)
+    elif datatype == 'int32':
+        differential_decoding_int32(file)
+    elif datatype == 'int64':
+        differential_decoding_int64(file)
 
 
 def differential_encoding_int8(input_file, output_file):
@@ -13,7 +39,7 @@ def differential_encoding_int8(input_file, output_file):
 
             if count == 0:
                 #running_value = current_value
-                binary_out.write(current_value.to_bytes(length=1, byteorder='big', signed=True)) ## write value in 16 bits
+                binary_out.write(current_value.to_bytes(length=1, byteorder='big', signed=False)) ## write value in 16 bits
             else:
                 diff = current_value - running_value
 
@@ -23,25 +49,25 @@ def differential_encoding_int8(input_file, output_file):
 
                 else:
                     binary_out.write(escape_code)
-                    binary_out.write(current_value.to_bytes(length=1, byteorder='big', signed=True))
+                    binary_out.write(current_value.to_bytes(length=1, byteorder='big', signed=False))
 
 
             running_value = current_value
             count+=1
 
-def differential_decoding_int8(input_file, output_file):
+def differential_decoding_int8(input_file):
     running_value = 0
     escape = 1
 
-    with open(input_file, 'rb') as binary_in, open(output_file, 'w') as text_out:
+    with open(input_file, 'rb') as binary_in:
         while True:
             if escape == 1:
                 chunk = binary_in.read(1)
                 if not chunk:
                     break
-                current_value = int.from_bytes(chunk, byteorder= 'big', signed=True)
+                current_value = int.from_bytes(chunk, byteorder= 'big', signed=False)
                 
-                text_out.write(f"{current_value}\n")
+                print(f"{current_value}")
                 running_value = current_value
                 escape = 0
             else:
@@ -52,9 +78,11 @@ def differential_decoding_int8(input_file, output_file):
 
                 if -127 <= current_value <= 127:
                     running_value += current_value
-                    text_out.write(f"{running_value}\n")
+                    print(f"{running_value}")
                 else:
                     escape = 1
+                
+            
                 
             
 def differential_encoding_int16(input_file, output_file):
@@ -68,7 +96,7 @@ def differential_encoding_int16(input_file, output_file):
 
             if count == 0:
                 #running_value = current_value
-                binary_out.write(current_value.to_bytes(length=2, byteorder='big', signed=True)) ## write value in 16 bits
+                binary_out.write(current_value.to_bytes(length=2, byteorder='big', signed=False)) ## write value in 16 bits
             else:
                 diff = current_value - running_value
 
@@ -78,25 +106,27 @@ def differential_encoding_int16(input_file, output_file):
 
                 else:
                     binary_out.write(escape_code)
-                    binary_out.write(current_value.to_bytes(length=2, byteorder='big', signed=True))
+                    binary_out.write(current_value.to_bytes(length=2, byteorder='big', signed=False))
 
 
             running_value = current_value
             count+=1
                     
-def differential_decoding_int16(input_file, output_file):
+                
+                    
+def differential_decoding_int16(input_file):
     running_value = 0
     escape = 1
 
-    with open(input_file, 'rb') as binary_in, open(output_file, 'w') as text_out:
+    with open(input_file, 'rb') as binary_in:
         while True:
             if escape == 1:
                 chunk = binary_in.read(2)
                 if not chunk:
                     break
-                current_value = int.from_bytes(chunk, byteorder= 'big', signed=True)
+                current_value = int.from_bytes(chunk, byteorder= 'big', signed=False)
                 
-                text_out.write(f"{current_value}\n")
+                print(f"{current_value}")
                 running_value = current_value
                 escape = 0
             else:
@@ -107,9 +137,11 @@ def differential_decoding_int16(input_file, output_file):
 
                 if -127 <= current_value <= 127:
                     running_value += current_value
-                    text_out.write(f"{running_value}\n")
+                    print(f"{running_value}")
                 else:
                     escape = 1
+                
+            
                 
 def differential_encoding_int32(input_file, output_file):
     
@@ -123,7 +155,7 @@ def differential_encoding_int32(input_file, output_file):
             current_value = int(line.strip())
     
             if sample_count > 0:
-                sample_diff = curent_value - sample_prev
+                sample_diff = current_value - sample_prev
                 sample.append(sample_diff)
             
             sample_count+=1
@@ -151,7 +183,7 @@ def differential_encoding_int32(input_file, output_file):
             if count == 0:
                 #running_value = current_value
                 binary_out.write(escape_length.to_bytes(length=1, byteorder='big', signed=True)) ## write escape code
-                binary_out.write(current_value.to_bytes(length=3, byteorder='big', signed=True)) ## write value in 32 bits
+                binary_out.write(current_value.to_bytes(length=3, byteorder='big', signed=False)) ## write value in 32 bits
             else:
                 diff = current_value - running_value
 
@@ -161,20 +193,21 @@ def differential_encoding_int32(input_file, output_file):
 
                 else:
                     binary_out.write(escape_code)
-                    binary_out.write(current_value.to_bytes(length=3, byteorder='big', signed=True))
+                    binary_out.write(current_value.to_bytes(length=3, byteorder='big', signed=False))
 
 
             running_value = current_value
             count+=1
                     
                 
-
-def differential_decoding_int32(input_file, output_file):
+                    
+                
+def differential_decoding_int32(input_file):
     running_value = 0
     escape = 1
     first_row = True
     
-    with open(input_file, 'rb') as binary_in, open(output_file, 'w') as text_out:
+    with open(input_file, 'rb') as binary_in:
         while True:
             if first_row:
                 chunk = binary_in.read(1)
@@ -191,9 +224,9 @@ def differential_decoding_int32(input_file, output_file):
                     chunk = binary_in.read(3)
                     if not chunk:
                         break
-                    current_value = int.from_bytes(chunk, byteorder= 'big', signed=True)
+                    current_value = int.from_bytes(chunk, byteorder= 'big', signed=False)
                     
-                    text_out.write(f"{current_value}\n")
+                    print(f"{current_value}")
                     running_value = current_value
                     escape = 0
                 else:
@@ -204,9 +237,11 @@ def differential_decoding_int32(input_file, output_file):
     
                     if min_diff <= current_value <= max_diff:
                         running_value += current_value
-                        text_out.write(f"{running_value}\n")
+                        print(f"{running_value}")
                     else:
                         escape = 1
+                    
+            
                     
             
 def differential_encoding_int64(input_file, output_file):
@@ -251,7 +286,7 @@ def differential_encoding_int64(input_file, output_file):
             if count == 0:
                 #running_value = current_value
                 binary_out.write(escape_length.to_bytes(length=1, byteorder='big', signed=True)) ## write escape code
-                binary_out.write(current_value.to_bytes(length=4, byteorder='big', signed=True)) ## write value in 64 bits
+                binary_out.write(current_value.to_bytes(length=4, byteorder='big', signed=False)) ## write value in 64 bits
             else:
                 diff = current_value - running_value
 
@@ -261,18 +296,18 @@ def differential_encoding_int64(input_file, output_file):
 
                 else:
                     binary_out.write(escape_code)
-                    binary_out.write(current_value.to_bytes(length=4, byteorder='big', signed=True))
+                    binary_out.write(current_value.to_bytes(length=4, byteorder='big', signed=False))
 
 
             running_value = current_value
             count+=1
 
-def differential_decoding_int64(input_file, output_file):
+def differential_decoding_int64(input_file):
     running_value = 0
     escape = 1
     first_row = True
     
-    with open(input_file, 'rb') as binary_in, open(output_file, 'w') as text_out:
+    with open(input_file, 'rb') as binary_in:
         while True:
             if first_row:
                 chunk = binary_in.read(1)
@@ -289,9 +324,9 @@ def differential_decoding_int64(input_file, output_file):
                     chunk = binary_in.read(4)
                     if not chunk:
                         break
-                    current_value = int.from_bytes(chunk, byteorder= 'big', signed=True)
+                    current_value = int.from_bytes(chunk, byteorder= 'big', signed=False)
                     
-                    text_out.write(f"{current_value}\n")
+                    print(f"{current_value}")
                     running_value = current_value
                     escape = 0
                 else:
@@ -302,9 +337,9 @@ def differential_decoding_int64(input_file, output_file):
     
                     if min_diff <= current_value <= max_diff:
                         running_value += current_value
-                        text_out.write(f"{running_value}\n")
+                        print(f"{running_value}")
                     else:
                         escape = 1
                     
             
-
+                    
