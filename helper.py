@@ -9,6 +9,9 @@ def ckeckCMD():
     accepted_arg2 = ['bin','rle','dic','for','dif']
     accepted_arg3 = ['int8','int16','int32','int64','string']
 
+    if len(sys.argv)==2 and sys.argv[1]=='run_all':
+        return 'run_all'
+
     if len(sys.argv)!=5:
         return 'error_length'
     
@@ -94,3 +97,17 @@ def choose_encoding_width(bits):
         return "int64"
     else:
         raise ValueError("Unsupported encoding width")
+    
+def findDatatype(filename):
+    if 'string' in filename:
+        return 'string'
+    elif 'int8' in filename:
+        return 'int8'
+    elif 'int16' in filename:
+        return 'int16'
+    elif 'int32' in filename:
+        return 'int32'
+    elif 'int64' in filename:
+        return 'int64'
+    else:
+        return 'error'
