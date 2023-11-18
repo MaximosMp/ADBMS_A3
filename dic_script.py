@@ -19,40 +19,55 @@ def writeFile(output_dir_path, file_path_arg, values_encoded, mapping):
 def dic_encode(datatype, file_path_arg):
     # retrieve and store data
     values = list()
-    lines = getLinesFromFile(file_path_arg)      
-    for line in lines:
-        values.append(line.strip())
+    lines = getLinesFromFile(file_path_arg)  
+    if datatype == 'string': 
+        for line in lines:   
+            values.append(line)
+    else:
+        for line in lines:
+            values.append(line.strip())
 
     # get unique values and map them to a number --> [[value, code], [], ..]
     values_uniq = list(set(values))
-    mapping = list()
+    mapping = dict()
     for i in range(len(values_uniq)):
-        mapping_pair = (values_uniq[i], i)
-        mapping.append(mapping_pair)
+        mapping[values_uniq[i]] = i
 
     # encode the data
     values_encoded = list()
     for value in values:
-        for i in range(len(mapping)):
-            if value == mapping[i][0]:
-                values_encoded.append(mapping[i][1])
+        values_encoded.append(mapping[value])
+
+    # mapping from dict to list
+    mapping = list(mapping.items())
 
     # correct the datatype for mapping and values_encoded if not string
-    bits = calculate_max_bit_length(input_file)
-    datatype = choose_encoding_width(bits)
-
-    if datatype == 'int8':
-        mapping = np.array(mapping, dtype=np.int8)
-        values_encoded = np.array(values_encoded, dtype=np.int8)
-    elif datatype == 'int16':
-        mapping = np.array(mapping, dtype=np.int16)
-        values_encoded = np.array(values_encoded, dtype=np.int16)
-    elif datatype == 'int32':
-        mapping = np.array(mapping, dtype=np.int32)
-        values_encoded = np.array(values_encoded, dtype=np.int32)
-    elif datatype == 'int64':
-        mapping = np.array(mapping, dtype=np.int64)
-        values_encoded = np.array(values_encoded, dtype=np.int64)
+    if datatype == 'string':
+        max_bit_length = max(values_encoded).bit_length()
+        datatype = choose_encoding_width(max_bit_length)
+        if datatype == 'int8':
+            values_encoded = np.array(values_encoded, dtype=np.int8)
+        elif datatype == 'int16':
+            values_encoded = np.array(values_encoded, dtype=np.int16)
+        elif datatype == 'int32':
+            values_encoded = np.array(values_encoded, dtype=np.int32)
+        elif datatype == 'int64':
+            values_encoded = np.array(values_encoded, dtype=np.int64)
+    else:
+        max_bit_length = max((int)(num).bit_length() for num in values)
+        datatype = choose_encoding_width(max_bit_length)
+        if datatype == 'int8':
+            mapping = np.array(mapping, dtype=np.int8)
+            values_encoded = np.array(values_encoded, dtype=np.int8)
+        elif datatype == 'int16':
+            mapping = np.array(mapping, dtype=np.int16)
+            values_encoded = np.array(values_encoded, dtype=np.int16)
+        elif datatype == 'int32':
+            mapping = np.array(mapping, dtype=np.int32)
+            values_encoded = np.array(values_encoded, dtype=np.int32)
+        elif datatype == 'int64':
+            mapping = np.array(mapping, dtype=np.int64)
+            values_encoded = np.array(values_encoded, dtype=np.int64)
 
     # write to file  
     output_dir_path = make_output_dir('encoded_files')
@@ -65,13 +80,19 @@ def dic_decode(file_path_arg):
         data = pickle.load(file_handler)
     file_handler.close()
 
+    # list to dict mapping
+    mapping = dict()
+    for i in range(len(data['map'])):
+        mapping[data['map'][i][1]] = data['map'][i][0]
+
     # decode the data
     values_decoded = list()
     for value in data['val']:
-        for i in range(len(data['map'])):
-            if value == data['map'][i][1]:
-                values_decoded.append(data['map'][i][0])
+        values_decoded.append(mapping[value])
     
     # print data to console (stdout)
     for value in values_decoded:
-        print(value)
+        if isinstance(value, str):
+            print(value.replace('\n', ''))
+        else:
+            print(value)
